@@ -32,4 +32,15 @@ describe('getStream', () => {
     });
     stm.type.should.be.equal('raw');
   });
+  it('should able to set name for syslog', () => {
+    const stm = loggerFactory.getStream({
+      logName: 'foo',
+      logStream: 'SYSLOG',
+      logHost: 'localhost',
+      logPort: 514,
+      logProto: 'tcp'
+    });
+    stm.type.should.be.equal('raw');
+    stm.stream.name.should.be.equal('foo');
+  });
 });

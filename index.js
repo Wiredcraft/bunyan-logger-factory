@@ -13,6 +13,7 @@ const getStream = config => {
       stream = {
         type: 'raw',
         stream: bsyslog.createBunyanStream({
+          name: config.logName,
           host: config.logHost,
           port: parseInt(config.logPort, 10),
           facility: bsyslog.facility.local0,

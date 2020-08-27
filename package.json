@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "log-file-differ": "^1.0.0",
     "mocha": "^5.2.0"
   }
 }

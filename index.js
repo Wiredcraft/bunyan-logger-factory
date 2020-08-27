@@ -3,6 +3,8 @@
 const bsyslog = require('bunyan-syslog');
 const bunyan = require('bunyan');
 const { isObject, mapLevelToName } = require('./utils');
+// those fields can't be overridden
+const coreFields = ['v', 'level', 'time'];
 
 const getStream = (config) => {
   let stream;
@@ -54,7 +56,17 @@ const reducer = (acc, cur) => {
   if (cur.map && isObject(cur.map)) {
     const kv = cur.map;
     Object.keys(kv).map((k) => {
-      acc[k] = typeof kv[k] === 'function' ? kv[k](acc[k]) : kv[k];
+      if (coreFields.includes(k)) {
+        throw new Error(`${k} is core field, can not be overridden`);
+      }
+      const v = kv[k];
+      if (k.indexOf('.') > -1) {
+        const [first, second] = k.split('.');
+        acc[first][second] =
+          typeof v === 'function' ? v(acc[first][second]) : v;
+      } else {
+        acc[k] = typeof kv[k] === 'function' ? v(acc[k]) : v;
+      }
     });
     return acc;
   }

@@ -193,4 +193,95 @@ describe('custom fields', () => {
       done();
     }, 500);
   });
+  it('should be able to use mapLevelToName', (done) => {
+    const filePath = path.resolve(__dirname, '../logs/app.log');
+    const logger = loggerFactory.init({
+      logName: 'test-logger',
+      logStream: 'FILE',
+      logPath: filePath,
+      transform: [
+        {
+          clone: {
+            level: 'logLevel',
+          },
+        },
+        {
+          map: {
+            logLevel: loggerFactory.mapLevelToName,
+          },
+        },
+      ],
+    });
+    const differ = new LogDiffer(filePath);
+    differ.setupBaseline();
+    logger.info({ foo: 'bar' }, 'test message');
+    setTimeout(() => {
+      const diff = differ.diffLines();
+      diff.length.should.equal(1);
+      diff[0].logLevel.should.equal('INFO');
+      done();
+    }, 1000);
+  });
+  it('should throw if overriding the core fields', (done) => {
+    const filePath = path.resolve(__dirname, '../logs/app.log');
+    const logger = loggerFactory.init({
+      logName: 'test-logger',
+      logStream: 'FILE',
+      logPath: filePath,
+      transform: [
+        {
+          map: {
+            level: loggerFactory.mapLevelToName,
+          },
+        },
+      ],
+    });
+    const differ = new LogDiffer(filePath);
+    differ.setupBaseline();
+    try {
+      logger.info({ foo: 'bar' }, 'test message');
+    } catch (err) {
+      err.message.should.contain('core field');
+      done();
+    }
+  });
+  it('should be able to use deep clone and map', (done) => {
+    const filePath = path.resolve(__dirname, '../logs/app.log');
+    const fn = (v) => {
+      return v + v;
+    };
+    const logger = loggerFactory.init({
+      logName: 'test-logger',
+      logStream: 'FILE',
+      logPath: filePath,
+      transform: [
+        {
+          clone: {
+            foo: 'qux.quz',
+          },
+        },
+        {
+          map: {
+            'qux.quz': fn,
+          },
+        },
+      ],
+    });
+    const differ = new LogDiffer(filePath);
+    differ.setupBaseline();
+    logger.info({ foo: 'bar' }, 'test message');
+    setTimeout(() => {
+      const diff = differ.diffLines();
+      diff.length.should.equal(1);
+      diff[0].should.include({
+        foo: 'bar',
+        msg: 'test message',
+      });
+      diff[0].qux.should.eql({
+        quz: 'barbar',
+      });
+
+      done();
+    }, 500);
+  });
 });

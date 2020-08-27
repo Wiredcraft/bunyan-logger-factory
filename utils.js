@@ -1,5 +1,7 @@
 'use strict';
 
+const bunyan = require('bunyan');
+
 function mapLevelToName(level) {
   var res = '';
   switch (level) {

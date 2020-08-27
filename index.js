@@ -98,6 +98,14 @@ exports.init = function (config) {
 
   if (config.transform && Array.isArray(config.transform)) {
     logger = buildLogger(logger, config.transform);
+    if (!config.avoidChildTransform) {
+      // https://github.com/trentm/node-bunyan/blob/f5a8d1dc263d6785325e3f7369a3aa9988254ebd/lib/bunyan.js#L686-L688
+      // override the child
+      bunyan.prototype.child = function (options, simple) {
+        const logger = new this.constructor(this, options || {}, simple);
+        return buildLogger(logger, config.transform);
+      };
+    }
   }
   return logger;
 };

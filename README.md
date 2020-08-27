@@ -86,6 +86,26 @@ const myLogger = loggerFactory.init({
 ```
 This will populate the value of foo by calling the `fn` function.
 
+### avoidChildTransform
+
+By default, the logger.child will inherit the transformation you set on the parent if there is a `tranform` in the `init` function, you can set `avoidChildTransform` to true to prevent that behavior.
+
+```
+const logger = loggerFactory.init({
+  logName: 'test-logger',
+  logStream: 'FILE',
+  logPath: filePath,
+  avoidChildTransform: true, // the transform only applies on the current logger instance.
+  transform: [
+    {
+      constant: {
+        ipsum: 'xxx',
+      },
+    },
+  ],
+});
+
+```
 
 ## License
 

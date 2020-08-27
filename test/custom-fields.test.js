@@ -284,4 +284,34 @@ describe('custom fields', () => {
       done();
     }, 500);
   });
+  it('should be able to inherit for childLogger', (done) => {
+    const filePath = path.resolve(__dirname, '../logs/app.log');
+    const logger = loggerFactory.init({
+      logName: 'test-logger',
+      logStream: 'FILE',
+      logPath: filePath,
+      avoidChildTransform: false,
+      transform: [
+        {
+          constant: {
+            ipsum: 'xxx',
+          },
+        },
+      ],
+    });
+    const differ = new LogDiffer(filePath);
+    differ.setupBaseline();
+    const child = logger.child({ qux: 111 });
+    child.info({ foo: 'bar' }, 'this is a message');
+    setTimeout(() => {
+      const diff = differ.diffLines();
+      diff.length.should.equal(1);
+      diff[0].should.include({
+        foo: 'bar',
+        msg: 'this is a message',
+        ipsum: 'xxx',
+      });
+      done();
+    }, 500);
+  });
 });

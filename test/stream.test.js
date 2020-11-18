@@ -43,4 +43,38 @@ describe('getStream', () => {
     stm.type.should.be.equal('raw');
     stm.stream.name.should.be.equal('foo');
   });
+  it('should only set one stream', () => {
+    const logger = loggerFactory.init({
+      logName: 'oneStream',
+      logStream: 'stdout',
+      logStreams: [{
+        logStream: 'stdout'
+      }, {
+        logName: 'multiStream',
+        logStream: 'syslog',
+        logHost: 'localhost',
+        logPort: 514,
+        logProto: 'tcp'
+      }]
+    });
+    logger.streams.length.should.be.equal(1);
+  });
+  it('should able to set multi streams', () => {
+    const logger = loggerFactory.init({
+      logName: 'multiStream',
+      logStreams: [
+        {
+          logStream: 'stdout'
+        },
+        {
+          logName: 'multiStream',
+          logStream: 'syslog',
+          logHost: 'localhost',
+          logPort: 514,
+          logProto: 'tcp'
+        }
+      ]
+    });
+    logger.streams.length.should.be.equal(2);
+  });
 });

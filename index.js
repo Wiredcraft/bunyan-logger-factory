@@ -82,9 +82,20 @@ const buildLogger = (logger, xform) => {
 };
 
 exports.init = function (config) {
+  let streams = [];
+
+  // to be compatible, when 'logStream' found, just using one stream mode
+  if (config.hasOwnProperty('logStream')) { // logStream: string: stdout | file | ...
+    streams.push(getStream(config));
+  } else if (config.hasOwnProperty('logStreams')) { // logStreams: array: [{logName, logStream, ...}, ...]
+    streams = config.logStreams.map((stmConfig) => getStream(stmConfig));
+  } else {
+    streams = [{ stream: process.stdout }]; // non-found, default
+  }
+
   let logger = bunyan.createLogger({
     name: config.logName,
-    streams: [getStream(config)],
+    streams,
     serializers: {
       // customize err serializer coz buyan std err serializer doesn't work without err.stack
       err:

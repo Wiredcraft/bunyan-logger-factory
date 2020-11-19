@@ -19,6 +19,9 @@
     "email": "",
     "url": ""
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Wiredcraft/bunyan-logger-factory/issues"

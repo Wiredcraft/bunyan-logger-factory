@@ -8,18 +8,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/xavierchow/bunyan-logger-factory.git"
+    "url": "git+ssh://git@github.com/Wiredcraft/bunyan-logger-factory.git"
   },
   "keywords": [
     "bunyan",
     "logger"
   ],
-  "author": "xavierchow",
+  "author": {
+    "name": "Wiredcraft",
+    "email": "",
+    "url": ""
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xavierchow/bunyan-logger-factory/issues"
+    "url": "https://github.com/Wiredcraft/bunyan-logger-factory/issues"
   },
-  "homepage": "https://github.com/xavierchow/bunyan-logger-factory#readme",
+  "homepage": "https://github.com/Wiredcraft/bunyan-logger-factory#readme",
   "dependencies": {
     "bunyan": "^1.8.12",
     "bunyan-syslog": "^0.3.2"

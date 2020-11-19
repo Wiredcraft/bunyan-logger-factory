@@ -10,8 +10,12 @@ describe('custom fields', () => {
     const filePath = path.resolve(__dirname, '../logs/app.log');
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           constant: {
@@ -40,8 +44,12 @@ describe('custom fields', () => {
     const filePath = path.resolve(__dirname, '../logs/app.log');
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           clone: {
@@ -70,8 +78,12 @@ describe('custom fields', () => {
     const filePath = path.resolve(__dirname, '../logs/app.log');
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           clone: {
@@ -103,8 +115,12 @@ describe('custom fields', () => {
     };
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           map: {
@@ -133,8 +149,12 @@ describe('custom fields', () => {
     };
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           map: {
@@ -164,8 +184,12 @@ describe('custom fields', () => {
     };
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           clone: {
@@ -197,8 +221,12 @@ describe('custom fields', () => {
     const filePath = path.resolve(__dirname, '../logs/app.log');
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           clone: {
@@ -226,8 +254,12 @@ describe('custom fields', () => {
     const filePath = path.resolve(__dirname, '../logs/app.log');
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           map: {
@@ -252,8 +284,12 @@ describe('custom fields', () => {
     };
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       transform: [
         {
           clone: {
@@ -288,8 +324,12 @@ describe('custom fields', () => {
     const filePath = path.resolve(__dirname, '../logs/app.log');
     const logger = loggerFactory.init({
       logName: 'test-logger',
-      logStream: 'FILE',
-      logPath: filePath,
+      logStreams: [
+        {
+          streamType: 'FILE',
+          streamPath: filePath,
+        }
+      ],
       avoidChildTransform: false,
       transform: [
         {

@@ -11,10 +11,14 @@ const loggerFactory = require('bunyan-logger-factory');
 
 const myLogger = loggerFactory.init({
   logName: 'my-logger-name',
-  logStream: process.env.LOGSTREAM,
-  logHost: process.env.LOGHOST,
-  logPort: process.env.LOGPORT,
-  logProto: process.env.LOGPROTO
+  logStreams: [
+    {
+      streamType: process.env.LOGSTREAM,
+      streamHost: process.env.LOGHOST,
+      streamPort: process.env.LOGPORT,
+      streamProto: process.env.LOGPROTO,
+    }
+  ],
 });
 ```
 
@@ -28,10 +32,14 @@ const loggerFactory = require('bunyan-logger-factory');
 
 const myLogger = loggerFactory.init({
   logName: 'my-logger-name',
-  logStream: process.env.LOGSTREAM,
-  logHost: process.env.LOGHOST,
-  logPort: process.env.LOGPORT,
-  logProto: process.env.LOGPROTO,
+  logStreams: [
+    {
+      streamType: process.env.LOGSTREAM,
+      streamHost: process.env.LOGHOST,
+      streamPort: process.env.LOGPORT,
+      streamProto: process.env.LOGPROTO,
+    }
+  ],
   transform: [
     {
       constant: {
@@ -49,10 +57,14 @@ const loggerFactory = require('bunyan-logger-factory');
 
 const myLogger = loggerFactory.init({
   logName: 'my-logger-name',
-  logStream: process.env.LOGSTREAM,
-  logHost: process.env.LOGHOST,
-  logPort: process.env.LOGPORT,
-  logProto: process.env.LOGPROTO,
+  logStreams: [
+    {
+      streamType: process.env.LOGSTREAM,
+      streamHost: process.env.LOGHOST,
+      streamPort: process.env.LOGPORT,
+      streamProto: process.env.LOGPROTO,
+    }
+  ],
   transform: [
     {
       clone: {
@@ -72,10 +84,14 @@ const fn = (v) => {return v + v;};
 
 const myLogger = loggerFactory.init({
   logName: 'my-logger-name',
-  logStream: process.env.LOGSTREAM,
-  logHost: process.env.LOGHOST,
-  logPort: process.env.LOGPORT,
-  logProto: process.env.LOGPROTO,
+  logStreams: [
+    {
+      streamType: process.env.LOGSTREAM,
+      streamHost: process.env.LOGHOST,
+      streamPort: process.env.LOGPORT,
+      streamProto: process.env.LOGPROTO,
+    }
+  ],
   transform: [
     {
       map: {
@@ -94,8 +110,12 @@ By default, the logger.child will inherit the transformation you set on the pare
 ```js
 const logger = loggerFactory.init({
   logName: 'test-logger',
-  logStream: 'FILE',
-  logPath: filePath,
+  logStreams: [
+    {
+      streamType: 'FILE',
+      streamPath: filePath,
+    }
+  ],
   avoidChildTransform: true, // the transform only applies on the current logger instance.
   transform: [
     {
@@ -110,23 +130,20 @@ const logger = loggerFactory.init({
 
 ### multi streams
 
-To be compatible with previous versions. When there is `logStream` key in config, multi streams config key `logStreams` would be dismissed.
-
-Using `logStreams` config key to set multi streams when `loggerFactory.init`.
+It's possible to add multiple stream configs in `logStreams`.
 
 ```js
 const logger = loggerFactory.init({
   logName: 'multiStream',
   logStreams: [
     {
-      logStream: 'stdout'
+      streamType: 'stdout'
     }, 
     {
-      logName: 'multiStream',
-      logStream: 'syslog',
-      logHost: 'localhost',
-      logPort: 514,
-      logProto: 'tcp'
+      streamType: 'syslog',
+      streamHost: 'localhost',
+      streamPort: 514,
+      streamProto: 'tcp'
     }
   ]
 });

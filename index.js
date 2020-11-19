@@ -6,22 +6,29 @@ const { isObject, mapLevelToName } = require('./utils');
 // those fields can't be overridden
 const coreFields = ['v', 'level', 'time'];
 
+// Stream Config:
+// streamType: string: file | syslog | stdout
+// streamPath: string: file path, type file only
+// streamName: string: log stream name, type syslog only, optional, only used when streamProto is 'sys'
+// streamHost: string: log stream host, type syslog only
+// streamPort: number: log stream port, type syslog only
+// streamProto: string: log stream protocol: sys | tcp | udp, type syslog only
 const getStream = (config) => {
   let stream;
-  switch (config.logStream.toUpperCase()) {
+  switch (config.streamType.toUpperCase()) {
     case 'FILE':
-      stream = { path: config.logPath || './logs/app.log' };
+      stream = { path: config.streamPath || './logs/app.log' };
       break;
     case 'SYSLOG':
       stream = {
         type: 'raw',
         stream: bsyslog.createBunyanStream({
-          name: config.logName,
-          host: config.logHost,
-          port: parseInt(config.logPort, 10),
+          name: config.streamName,
+          host: config.streamHost,
+          port: parseInt(config.streamPort, 10),
           facility: bsyslog.facility.local0,
-          type: config.logProto,
-        }),
+          type: config.streamProto
+        })
       };
       break;
     case 'STDOUT':
@@ -82,12 +89,9 @@ const buildLogger = (logger, xform) => {
 };
 
 exports.init = function (config) {
-  let streams = [];
+  let streams;
 
-  // to be compatible, when 'logStream' found, just using one stream mode
-  if (config.hasOwnProperty('logStream')) { // logStream: string: stdout | file | ...
-    streams.push(getStream(config));
-  } else if (config.hasOwnProperty('logStreams')) { // logStreams: array: [{logName, logStream, ...}, ...]
+  if (config.hasOwnProperty('logStreams')) {
     streams = config.logStreams.map((stmConfig) => getStream(stmConfig));
   } else {
     streams = [{ stream: process.stdout }]; // non-found, default

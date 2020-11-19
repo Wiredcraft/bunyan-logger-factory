@@ -1,5 +1,5 @@
 {
-  "name": "bunyan-logger-factory",
+  "name": "@wiredcraft/bunyan-logger-factory",
   "version": "1.3.0",
   "description": "",
   "main": "index.js",

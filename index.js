@@ -27,7 +27,12 @@ const getStream = (config) => {
         facility: bsyslog.facility.local0,
         type: config.streamProto
       });
-      if (config.streamProto.toUpperCase() === 'UDP') {
+      if (!config.streamProto // default type is udp, so undefined shall also be handled
+        || (
+          config.streamProto
+          && typeof config.streamProto === 'string'
+          && config.streamProto.toUpperCase() === 'UDP'
+        )) {
         ignoreUDPError(syslogStream);
       }
       stream = {

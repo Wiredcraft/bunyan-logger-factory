@@ -28,7 +28,7 @@ const getStream = (config) => {
         type: config.streamProto
       });
       if (config.streamProto.toUpperCase() === 'UDP') {
-        syslogStream = replaceUdpSendFunc(syslogStream);
+        ignoreUDPError(syslogStream);
       }
       stream = {
         type: 'raw',
@@ -41,20 +41,10 @@ const getStream = (config) => {
   }
   return stream;
 };
-const replaceUdpSendFunc = function (udpStream) {
-  udpStream._send = function _send(msg) {
-    const buf = Buffer.from(msg, 'utf-8');
-    const s = this.socket;
-    const self = this;
-
-    this._pending++;
-    s.send(buf, 0, buf.length, this.port, this.host, function (err) {
-      // no err checking, just ignore it here
-      self._pending--;
-    });
-  };
-
-  return udpStream;
+const ignoreUDPError = function (udpStream) {
+  udpStream.on('error', function() {
+    // do nothing here, ignore possible errors
+  });
 };
 
 const noStackErrSerializers = function (err) {

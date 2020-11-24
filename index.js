@@ -20,7 +20,7 @@ const getStream = (config) => {
       stream = { path: config.streamPath || './logs/app.log' };
       break;
     case 'SYSLOG':
-      let syslogStream = bsyslog.createBunyanStream({
+      const syslogStream = bsyslog.createBunyanStream({
         name: config.streamName,
         host: config.streamHost,
         port: parseInt(config.streamPort, 10),
@@ -42,8 +42,8 @@ const getStream = (config) => {
   return stream;
 };
 const ignoreUDPError = function (udpStream) {
-  udpStream.on('error', function() {
-    // do nothing here, ignore possible errors
+  udpStream.on('error', function(err) {
+    console.error('bunyan-syslog/UDPStream', err);
   });
 };
 

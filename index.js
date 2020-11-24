@@ -20,15 +20,19 @@ const getStream = (config) => {
       stream = { path: config.streamPath || './logs/app.log' };
       break;
     case 'SYSLOG':
+      const syslogStream = bsyslog.createBunyanStream({
+        name: config.streamName,
+        host: config.streamHost,
+        port: parseInt(config.streamPort, 10),
+        facility: bsyslog.facility.local0,
+        type: config.streamProto
+      });
+      if (isProtoUDP(config)) {
+        ignoreUDPError(syslogStream);
+      }
       stream = {
         type: 'raw',
-        stream: bsyslog.createBunyanStream({
-          name: config.streamName,
-          host: config.streamHost,
-          port: parseInt(config.streamPort, 10),
-          facility: bsyslog.facility.local0,
-          type: config.streamProto
-        })
+        stream: syslogStream
       };
       break;
     case 'STDOUT':
@@ -36,6 +40,21 @@ const getStream = (config) => {
       stream = { stream: process.stdout };
   }
   return stream;
+};
+
+const ignoreUDPError = function (udpStream) {
+  udpStream.on('error', function(err) {
+    console.error('bunyan-syslog/UDPStream', err);
+  });
+};
+
+const isProtoUDP = function (config) {
+  return !config.streamProto // default type is udp, so undefined shall also be handled
+    || (
+      config.streamProto
+      && typeof config.streamProto === 'string'
+      && config.streamProto.toUpperCase() === 'UDP'
+    );
 };
 
 const noStackErrSerializers = function (err) {
